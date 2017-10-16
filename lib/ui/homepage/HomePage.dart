@@ -50,8 +50,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _sendMessage({String text, String imageUrl}) {
-    collection.document(id_message).setData({
-      'id': id_message,
+    collection.document().setData({
       'senderImage': googleSignIn.currentUser.photoUrl,
       'sender': googleSignIn.currentUser.displayName,
       'text': text,
