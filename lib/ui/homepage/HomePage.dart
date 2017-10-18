@@ -15,6 +15,9 @@ import 'dart:math';
 
 
 class HomePage extends StatefulWidget {
+
+  static const String routeName = "/HomePage";
+
   @override
   _HomePageState createState() => new _HomePageState();
 }
@@ -25,6 +28,8 @@ class _HomePageState extends State<HomePage> {
 
   final googleSignIn = new GoogleSignIn();
 
+  GoogleSignInAccount user;
+
   final auth = FirebaseAuth.instance;
 
   var collection = Firestore.instance.collection("messages");
@@ -32,8 +37,6 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _textController = new TextEditingController();
 
   bool _isComposing = false;
-
-//  String idMessage = PushIdGenerator.generatePushChildName();
 
   Future<Null> _handleSubmitted(String text) async{
 
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<Null> _ensureLoggedIn() async{
 
-    GoogleSignInAccount user = googleSignIn.currentUser;
+    user = googleSignIn.currentUser;
 
     if(user == null)
       user = await googleSignIn.signInSilently();
@@ -80,29 +83,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var uid = googleSignIn.currentUser.id.toString();
 
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Friendly Chat Firestore"),
-      ),
-      body: new Container(
-        child: new Column(
-          children: <Widget>[
-            new Flexible(
-                child: new ChatMessageView(uid)
-            ),
-            new Divider(height: 1.0),
-            new Container(
-                decoration: new BoxDecoration(
-                    color: Theme.of(context).cardColor
-                ),
-                child: _buildTextComposer()
-            ),
-          ],
+    if(user != null){
+
+      String uid = user.id.toString();
+
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Friendly Chat Firestore"),
         ),
-      ),
-    );
+        body: new Container(
+          child: new Column(
+            children: <Widget>[
+              new Flexible(
+                  child: new ChatMessageView(uid)
+              ),
+              new Divider(height: 1.0),
+              new Container(
+                  decoration: new BoxDecoration(
+                      color: Theme.of(context).cardColor
+                  ),
+                  child: _buildTextComposer()
+              ),
+            ],
+          ),
+        ),
+      );
+    }else{
+      return new Text("User Not Login");
+    }
+
   }
 
   _buildTextComposer() {

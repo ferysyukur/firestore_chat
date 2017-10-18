@@ -6,10 +6,16 @@ void main(){
 }
 
 class MyApp extends StatelessWidget {
+
+  var routes = <String, WidgetBuilder>{
+    HomePage.routeName : (BuildContext context) => new HomePage()
+  };
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "Firestore Chat Flutter",
+      routes: routes,
       theme: new ThemeData(
         primarySwatch: Colors.red,
         accentColor: Colors.orangeAccent[400]
