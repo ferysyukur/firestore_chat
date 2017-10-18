@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firestore_chat/login.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(new Mylogin());
 }
 
 class MyApp extends StatelessWidget {

@@ -4,6 +4,22 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
+  google_sign_in:
+    git:
+      url: "https://github.com/oddbit/plugins.git"
+      path: packages/google_sign_in
+  firebase_analytics:
+    git:
+      url: "https://github.com/oddbit/plugins.git"
+      path: packages/firebase_analytics
+  firebase_storage:
+    git:
+      url: "https://github.com/oddbit/plugins.git"
+      path: packages/firebase_storage
+  firebase_auth:
+    git:
+      url: "https://github.com/oddbit/plugins.git"
+      path: packages/firebase_auth
 
 dev_dependencies:
   flutter_test:
@@ -51,3 +67,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies, 
   # see https://flutter.io/custom-fonts/#from-packages
+  assets:
+    - image/g.png
+    - image/f.png
+    - image/gb.png
+    - image/fb.png
+    - image/tb.png
