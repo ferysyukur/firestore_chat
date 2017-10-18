@@ -5,7 +5,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_firestore/firebase_firestore.dart';
-import 'package:firebase_firestore/src/utils/push_id_generator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -34,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   bool _isComposing = false;
 
-  String id_message = PushIdGenerator.generatePushChildName();
+//  String idMessage = PushIdGenerator.generatePushChildName();
 
   Future<Null> _handleSubmitted(String text) async{
 
@@ -51,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   void _sendMessage({String text, String imageUrl}) {
     collection.document().setData({
+      'uid': googleSignIn.currentUser.id,
       'senderImage': googleSignIn.currentUser.photoUrl,
       'sender': googleSignIn.currentUser.displayName,
       'text': text,
@@ -80,6 +80,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var uid = googleSignIn.currentUser.id.toString();
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Friendly Chat Firestore"),
@@ -88,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         child: new Column(
           children: <Widget>[
             new Flexible(
-                child: new ChatMessageView()
+                child: new ChatMessageView(uid)
             ),
             new Divider(height: 1.0),
             new Container(
