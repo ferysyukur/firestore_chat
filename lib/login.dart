@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+
+final auth = FirebaseAuth.instance;
+final googleSignIn = new GoogleSignIn();
 
 class Login extends StatelessWidget {
   @override
@@ -28,6 +35,22 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
+  Future<Null> _ensureLoggedIn() async {
+    GoogleSignInAccount user = googleSignIn.currentUser;
+    if (user == null)
+      user = await googleSignIn.signInSilently();
+    if (user == null) {
+      await googleSignIn.signIn();
+    }
+    if (await auth.currentUser() == null) {
+      GoogleSignInAuthentication credentials =
+      await googleSignIn.currentUser.authentication;
+      await auth.signInWithGoogle(
+        idToken: credentials.idToken,
+        accessToken: credentials.accessToken,
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -66,8 +89,21 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   }
 
-  void _onTap() {
-   print("Tap");
+  Future<Null> _onTap() async {
+    GoogleSignInAccount user = googleSignIn.currentUser;
+    if (user == null)
+      user = await googleSignIn.signInSilently();
+    if (user == null) {
+      await googleSignIn.signIn();
+    }
+    if (await auth.currentUser() == null) {
+      GoogleSignInAuthentication credentials =
+      await googleSignIn.currentUser.authentication;
+      await auth.signInWithGoogle(
+      idToken: credentials.idToken,
+      accessToken: credentials.accessToken,
+    );
+    }
   }
 }
 

@@ -4,6 +4,8 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: 0.1.1
+  firebase_firestore: 0.0.1+1
   google_sign_in:
     git:
       url: "https://github.com/oddbit/plugins.git"
@@ -67,9 +69,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies, 
   # see https://flutter.io/custom-fonts/#from-packages
-  assets:
-    - image/g.png
-    - image/f.png
-    - image/gb.png
-    - image/fb.png
-    - image/tb.png
