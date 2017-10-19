@@ -4,9 +4,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:facebook_sign_in/facebook_sign_in.dart'; // Import Facebook Login plugin.
+import 'package:firestore_chat/User.dart';
 
 final auth = FirebaseAuth.instance;
 final googleSignIn = new GoogleSignIn();
+
+
+final List<String> read = ["public_profile", "user_friends", "email"];
 
 class Login extends StatelessWidget {
   @override
@@ -35,22 +40,7 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
-  Future<Null> _ensureLoggedIn() async {
-    GoogleSignInAccount user = googleSignIn.currentUser;
-    if (user == null)
-      user = await googleSignIn.signInSilently();
-    if (user == null) {
-      await googleSignIn.signIn();
-    }
-    if (await auth.currentUser() == null) {
-      GoogleSignInAuthentication credentials =
-      await googleSignIn.currentUser.authentication;
-      await auth.signInWithGoogle(
-        idToken: credentials.idToken,
-        accessToken: credentials.accessToken,
-      );
-    }
-  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -66,20 +56,16 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 image: new AssetImage("image/gb.png"),
                 height: 60.0,
                 width: 300.0,
-
               ),
-              onTap: _onTap,
+              onTap: _loginGoogle,
             ),
-
-
-
             new GestureDetector(
               child:  new Image(
                 image: new AssetImage("image/fb.png"),
                 height: 60.0,
                 width: 300.0,
               ),
-              onTap: _onTap,
+              onTap: _loginFacebook,
             ),
 
           ],
@@ -89,7 +75,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   }
 
-  Future<Null> _onTap() async {
+  Future<Null> _loginGoogle() async {
     GoogleSignInAccount user = googleSignIn.currentUser;
     if (user == null)
       user = await googleSignIn.signInSilently();
@@ -104,6 +90,21 @@ class _MyLoginPageState extends State<MyLoginPage> {
       accessToken: credentials.accessToken,
     );
     }
+
+    User mUser = new User(user.displayName,user.email,user.photoUrl);
+    print("Cek : "+mUser.email);
+    print("Cek : "+mUser.name);
+    print("Cek : "+mUser.photoUrl);
+
+    //switch page to chat and passing model user
+
+
+
+  }
+
+  Future<Null> _loginFacebook() async{
+    String token = await FacebookSignIn.loginWithReadPermissions(read);
+    print("token: " + token);
   }
 }
 
