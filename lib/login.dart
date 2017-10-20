@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:facebook_sign_in/facebook_sign_in.dart'; // Import Facebook Login plugin.
 import 'package:firestore_chat/User.dart';
+import 'package:firestore_chat/TestPas.dart';
 
 final auth = FirebaseAuth.instance;
 final googleSignIn = new GoogleSignIn();
@@ -91,14 +92,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
     }
 
-    User mUser = new User(user.displayName,user.email,user.photoUrl);
-    print("Cek : "+mUser.email);
-    print("Cek : "+mUser.name);
-    print("Cek : "+mUser.photoUrl);
-
-    //switch page to chat and passing model user
-
-
+//    User mUser = new User(user.displayName,user.email,user.photoUrl);
+//    print("Cek : "+mUser.email);
+//    print("Cek : "+mUser.name);
+//    print("Cek : "+mUser.photoUrl);
+//
+//    //switch page to chat and passing model user
+//
+//    Route route = new MaterialPageRoute(
+//      settings: new RouteSettings(name: "/todos/todo"),
+//      builder: (BuildContext context) => new TestPas(myuser: mUser)
+//    );
+//    Navigator.of(context).push(route);
 
   }
 
