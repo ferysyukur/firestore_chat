@@ -6,16 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatelessWidget {
+
+class LoginPage extends StatefulWidget {
 
   static const String routeName= "/LoginPage";
+
+  @override
+  _LoginPageState createState() => new _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
 
   final googleSignIn = new GoogleSignIn();
 
   final auth = FirebaseAuth.instance;
 
   BuildContext mContext;
+
+  SharedPreferences pref;
 
   Future<Null> _googleSignIn() async{
 
@@ -31,13 +41,30 @@ class LoginPage extends StatelessWidget {
     if(await auth.currentUser() == null){
       GoogleSignInAuthentication credentials = await googleSignIn.currentUser.authentication;
       await auth.signInWithGoogle(idToken: credentials.idToken, accessToken: credentials.accessToken,);
-      User mUser = getUser(googleSignIn.currentUser.id.toString(), googleSignIn.currentUser.displayName, googleSignIn.currentUser.photoUrl);
-      Navigator.push(mContext, new MaterialPageRoute(builder: (_) => new HomePage(mUser: mUser,)));
+      Map map = {'uid': googleSignIn.currentUser.id.toString(), 'displayName': googleSignIn.currentUser.displayName, 'photoUrl': googleSignIn.currentUser.photoUrl};
+      User mUser = new User.fromMap(map);
+      pref.setString('map', JSON.encode(mUser.toMap()));
+      Navigator.pushReplacement(mContext, new MaterialPageRoute(builder: (_) => new HomePage(mUser: mUser,)));
 //      Navigator.pushReplacementNamed(mContext, '/HomePage:${JSON.encode({'id': user.uid, 'name': user.displayName})}');
 //      Navigator.pushReplacementNamed(mContext, '/HomePage:${user}');
     }
 
 
+  }
+
+  Future<Null> _checkLogin() async{
+    pref = await SharedPreferences.getInstance();
+    if(pref.getString("map") != null){
+      Map map = JSON.decode(pref.getString("map"));
+      User mUser = new User.fromMap(map);
+      Navigator.pushReplacement(mContext, new MaterialPageRoute(builder: (_) => new HomePage(mUser: mUser,)));
+    }
+  }
+
+
+  @override
+  void initState() {
+    _checkLogin();
   }
 
   @override
@@ -64,7 +91,8 @@ class LoginPage extends StatelessWidget {
     _googleSignIn();
   }
 
-  User getUser(String uid, String displayName, String photoUrl) {
-    return new User(uid, displayName, photoUrl);
-  }
+//  User getUser(String uid, String displayName, String photoUrl) {
+//    return new User(uid, displayName, photoUrl);
+//  }
 }
+
