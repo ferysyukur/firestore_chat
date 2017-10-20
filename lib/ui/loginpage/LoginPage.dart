@@ -31,8 +31,9 @@ class LoginPage extends StatelessWidget {
     if(await auth.currentUser() == null){
       GoogleSignInAuthentication credentials = await googleSignIn.currentUser.authentication;
       await auth.signInWithGoogle(idToken: credentials.idToken, accessToken: credentials.accessToken,);
-      User user = getUser(googleSignIn.currentUser.id.toString(), googleSignIn.currentUser.displayName, googleSignIn.currentUser.photoUrl);
-      Navigator.pushReplacementNamed(mContext, '/HomePage:${JSON.encode({'id': user.uid, 'name': user.displayName})}');
+      User mUser = getUser(googleSignIn.currentUser.id.toString(), googleSignIn.currentUser.displayName, googleSignIn.currentUser.photoUrl);
+      Navigator.push(mContext, new MaterialPageRoute(builder: (_) => new HomePage(mUser: mUser,)));
+//      Navigator.pushReplacementNamed(mContext, '/HomePage:${JSON.encode({'id': user.uid, 'name': user.displayName})}');
 //      Navigator.pushReplacementNamed(mContext, '/HomePage:${user}');
     }
 

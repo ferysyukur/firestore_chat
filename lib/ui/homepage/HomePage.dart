@@ -1,3 +1,4 @@
+import 'package:firestore_chat/model/User.dart';
 import 'package:firestore_chat/ui/loginpage/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firestore_chat/ui/homepage/ChatMessageView.dart';
@@ -18,9 +19,13 @@ import 'dart:math';
 
 class HomePage extends StatefulWidget {
 
-  final Map map;
+//  final Map map;
+//
+//  HomePage(this.map);
 
-  HomePage(this.map);
+  final User mUser;
+
+  HomePage({this.mUser});
 
 //  static const String routeName = "/HomePage:";
 
@@ -59,8 +64,8 @@ class _HomePageState extends State<HomePage> {
 
   void _sendMessage({String text, String imageUrl}) {
     collection.document().setData({
-      'senderImage': googleSignIn.currentUser.photoUrl,
-      'sender': googleSignIn.currentUser.displayName,
+      'senderImage': widget.mUser.photoUrl,
+      'sender': widget.mUser.displayName,
       'text': text,
       'imageUrl': imageUrl,
       'timestamp': new DateTime.now().millisecondsSinceEpoch
@@ -78,7 +83,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _checkUID(){
-    id = widget.map["id"];
+    id = widget.mUser.uid;
     if(id != null){
       print("Get Id: ${id}");
     }
