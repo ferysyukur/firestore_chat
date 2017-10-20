@@ -92,18 +92,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
     }
 
-//    User mUser = new User(user.displayName,user.email,user.photoUrl);
-//    print("Cek : "+mUser.email);
-//    print("Cek : "+mUser.name);
-//    print("Cek : "+mUser.photoUrl);
-//
-//    //switch page to chat and passing model user
-//
-//    Route route = new MaterialPageRoute(
-//      settings: new RouteSettings(name: "/todos/todo"),
-//      builder: (BuildContext context) => new TestPas(myuser: mUser)
-//    );
-//    Navigator.of(context).push(route);
+    User mUser = new User(user.displayName,user.email,user.photoUrl);
+    print("Cek : "+mUser.email);
+    print("Cek : "+mUser.name);
+    print("Cek : "+mUser.photoUrl);
+
+    //switch page to chat and passing model user
+
+    Route route = new MaterialPageRoute(
+      settings: new RouteSettings(name: "/todos/todo"),
+      builder: (BuildContext context) => new TestPas(myuser: mUser)
+    );
+    Navigator.of(context).push(route);
 
   }
 
