@@ -1,3 +1,4 @@
+import 'package:firestore_chat/ui/loginpage/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firestore_chat/ui/homepage/ChatMessageView.dart';
 
@@ -16,6 +17,13 @@ import 'dart:math';
 
 
 class HomePage extends StatefulWidget {
+
+  final Map map;
+
+  HomePage(this.map);
+
+//  static const String routeName = "/HomePage:";
+
   @override
   _HomePageState createState() => new _HomePageState();
 }
@@ -32,6 +40,8 @@ class _HomePageState extends State<HomePage> {
 
   final TextEditingController _textController = new TextEditingController();
 
+  String id;
+
   bool _isComposing = false;
 
   String id_message = PushIdGenerator.generatePushChildName();
@@ -43,8 +53,6 @@ class _HomePageState extends State<HomePage> {
     setState((){
       _isComposing = false;
     });
-
-    await _ensureLoggedIn();
 
     _sendMessage(text: text);
   }
@@ -60,26 +68,31 @@ class _HomePageState extends State<HomePage> {
     analitycs.logEvent(name: "send_message");
   }
 
-  Future<Null> _ensureLoggedIn() async{
-
-    GoogleSignInAccount user = googleSignIn.currentUser;
-
-    if(user == null)
-      user = await googleSignIn.signInSilently();
-
-    if(user == null){
-      await googleSignIn.signIn();
-      analitycs.logLogin();
+  Future<Null> _checkLogin() async{
+    if(await auth.currentUser()==null){
+      print("Not Login");
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+    }else{
+      print("Login ${googleSignIn.currentUser.displayName}");
     }
+  }
 
-    if(await auth.currentUser() == null){
-      GoogleSignInAuthentication credentials = await googleSignIn.currentUser.authentication;
-      await auth.signInWithGoogle(idToken: credentials.idToken, accessToken: credentials.accessToken,);
+  void _checkUID(){
+    id = widget.map["id"];
+    if(id != null){
+      print("Get Id: ${id}");
     }
+  }
+
+
+  @override
+  void initState() {
+    _checkUID();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Friendly Chat Firestore"),
@@ -116,7 +129,6 @@ class _HomePageState extends State<HomePage> {
                 child: new IconButton(
                     icon: new Icon(Icons.photo_camera),
                     onPressed: () async{
-                      await _ensureLoggedIn();
                       File imageFile = await ImagePicker.pickImage();
                       int random = new Random().nextInt(100000);
                       StorageReference ref = FirebaseStorage.instance.ref().child("image_$random.jpg");
