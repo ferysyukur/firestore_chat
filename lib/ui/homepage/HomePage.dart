@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
 
   void _sendMessage({String text, String imageUrl}) {
     collection.document().setData({
+      'uid': id,
       'senderImage': widget.mUser.photoUrl,
       'sender': widget.mUser.displayName,
       'text': text,
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
         child: new Column(
           children: <Widget>[
             new Flexible(
-                child: new ChatMessageView()
+                child: new ChatMessageView(uid: id,)
             ),
             new Divider(height: 1.0),
             new Container(

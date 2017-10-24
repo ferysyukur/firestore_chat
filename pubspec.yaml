@@ -5,8 +5,11 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: 0.1.1
-  firebase_firestore: 0.0.1+1
   shared_preferences: 0.2.5
+  firebase_firestore:
+    git:
+      url: "https://github.com/pauldemarco/plugins"
+      path: packages/firebase_firestore
   google_sign_in:
     git:
       url: "https://github.com/oddbit/plugins.git"
